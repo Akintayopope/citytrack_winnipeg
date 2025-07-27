@@ -1,2 +1,23 @@
-<h1>Wards#show</h1>
-<p>Find me in app/views/wards/show.html.erb</p>
+<h1><%= @ward.name %> (<%= @ward.district %>)</h1>
+
+<h3>Service Requests</h3>
+<ul>
+  <% @ward.service_requests.each do |request| %>
+    <li><%= request.category %> - <%= request.status %> (on <%= request.request_date %>)</li>
+  <% end %>
+</ul>
+
+<h3>Expenses</h3>
+<ul>
+  <% @ward.expense_reports.each do |expense| %>
+    <li><%= expense.category %>: $<%= expense.amount %> (on <%= expense.report_date %>)</li>
+  <% end %>
+</ul>
+
+<h3>Community Events</h3>
+<ul>
+  <% @ward.events.each do |event| %>
+    <li><%= event.name %> - <%= event.event_date %> at <%= event.location %></li>
+  <% end %>
+</ul>
+
