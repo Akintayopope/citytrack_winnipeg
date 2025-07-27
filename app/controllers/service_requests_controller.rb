@@ -1,13 +1,20 @@
 class ServiceRequestsController < ApplicationController
   def index
-  end
+    @wards = Ward.all
+    @service_requests = ServiceRequest.all
 
-  def show
-  end
+    # Apply search if query is present
+    if params[:search].present?
+      @service_requests = @service_requests.where(
+        "category LIKE ? OR description LIKE ?",
+        "%#{params[:search]}%",
+        "%#{params[:search]}%"
+      )
+    end
 
-  def new
-  end
-
-  def edit
+    # Apply ward filter if ward_id is present
+    if params[:ward_id].present?
+      @service_requests = @service_requests.where(ward_id: params[:ward_id])
+    end
   end
 end

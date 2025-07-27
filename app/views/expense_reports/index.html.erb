@@ -1,2 +1,34 @@
-<h1>ExpenseReports#index</h1>
-<p>Find me in app/views/expense_reports/index.html.erb</p>
+<h1>Expense Reports</h1>
+
+<%= form_with url: expense_reports_path, method: :get, local: true do %>
+  <div class="form-group">
+    <%= label_tag :search, "Search" %>
+    <%= text_field_tag :search, params[:search], class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :ward_id, "Filter by Ward" %>
+    <%= select_tag :ward_id, options_from_collection_for_select(@wards, :id, :name, params[:ward_id]), include_blank: "All Wards", class: "form-control" %>
+  </div>
+
+  <%= submit_tag "Filter", class: "btn btn-primary mt-2" %>
+<% end %>
+
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Report Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @expense_reports.each do |expense| %>
+      <tr>
+        <td><%= expense.category %></td>
+        <td>$<%= expense.amount %></td>
+        <td><%= expense.report_date %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
