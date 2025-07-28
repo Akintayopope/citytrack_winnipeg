@@ -1,3 +1,176 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
-<button class="btn btn-primary">Bootstrap Test</button>
+<div class="container my-5">
+  <!-- Hero Section -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Welcome to <span class="text-primary">CityTrack Winnipeg</span></h1>
+    <p class="lead text-muted">Track service requests, councillor expenses, and community events in real-time.</p>
+  </div>
+
+  <!-- MAP SECTION -->
+  <div class="card shadow-sm mb-5 border-0">
+    <div class="card-body p-0">
+      <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+    </div>
+  </div>
+
+  <!-- SERVICE CAROUSEL -->
+  <div class="card shadow-sm mb-5 border-0">
+    <div class="card-body p-0">
+      <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://source.unsplash.com/1200x400/?water" class="d-block w-100" alt="Water Service">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Water Services</h5>
+              <p>Tracking leaks and water-related requests.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1200x400/?garbage" class="d-block w-100" alt="Garbage Collection">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Garbage & Recycling</h5>
+              <p>Latest reports on waste collection.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1200x400/?telephone" class="d-block w-100" alt="Telephone Services">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Telephone & Communications</h5>
+              <p>Infrastructure-related service updates.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1200x400/?road" class="d-block w-100" alt="Road Maintenance">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Road & Infrastructure</h5>
+              <p>Stay updated on road maintenance and repairs.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#serviceCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#serviceCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP 4 SERVICES SECTION -->
+  <div class="row text-center mb-5">
+    <% ["water", "garbage", "telephone", "road"].zip(["Water Services", "Garbage & Recycling", "Telephone Services", "Road Maintenance"]).each do |img, title| %>
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+          <img src="https://source.unsplash.com/400x200/?<%= img %>" class="card-img-top" alt="<%= title %>">
+          <div class="card-body">
+            <h5 class="card-title"><%= title %></h5>
+            <p class="card-text text-muted">
+              <%= case title
+                  when "Water Services" then "Track leaks and water-related service requests."
+                  when "Garbage & Recycling" then "Stay updated on waste collection schedules."
+                  when "Telephone Services" then "Monitor telecom-related service updates."
+                  else "Real-time updates on road and infrastructure work."
+                end %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="row text-center g-4 mb-5">
+    <% [["bi-geo-alt text-primary", "Wards", Ward.count],
+       ["bi-tools text-success", "Service Requests", ServiceRequest.count],
+       ["bi-cash-stack text-warning", "Expenses", ExpenseReport.count],
+       ["bi-calendar-event text-danger", "Events", Event.count]].each do |icon, title, count| %>
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <i class="bi <%= icon %> display-4"></i>
+            <h5 class="card-title mt-3"><%= title %></h5>
+            <p class="display-6 fw-bold"><%= count %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Latest Data Section -->
+  <div class="row">
+    <!-- Latest Service Requests -->
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Latest Service Requests</h4>
+        </div>
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <% ServiceRequest.order(request_date: :desc).limit(4).each do |request| %>
+              <div class="col">
+                <div class="card h-100 border-light shadow-sm">
+                  <div class="card-body">
+                    <h6 class="fw-bold"><%= request.category %></h6>
+                    <p class="small text-muted"><%= request.status %></p>
+                    <p class="small text-secondary"><%= request.request_date %></p>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Upcoming Events</h4>
+        </div>
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <% Event.order(event_date: :asc).limit(4).each do |event| %>
+              <div class="col">
+                <div class="card h-100 border-light shadow-sm">
+                  <div class="card-body">
+                    <h6 class="fw-bold"><%= event.name %></h6>
+                    <p class="small text-muted">On <%= event.event_date %></p>
+                    <p class="small text-secondary">Location: <%= event.location %></p>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="text-center mt-4">
+    <%= link_to "View All Wards", wards_path, class: "btn btn-primary btn-lg mx-2" %>
+    <%= link_to "Service Requests", service_requests_path, class: "btn btn-outline-primary btn-lg mx-2" %>
+    <%= link_to "Expenses", expense_reports_path, class: "btn btn-outline-primary btn-lg mx-2" %>
+    <%= link_to "Events", events_path, class: "btn btn-outline-primary btn-lg mx-2" %>
+  </div>
+</div>
+
+<!-- LEAFLET MAP SCRIPT -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var map = L.map('map').setView([49.8951, -97.1384], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
+
+    <% ServiceRequest.limit(10).each do |req| %>
+      <% if req.latitude.present? && req.longitude.present? %>
+        L.marker([<%= req.latitude %>, <%= req.longitude %>])
+          .addTo(map)
+          .bindPopup("<strong><%= req.category %></strong><br><%= req.description %>");
+      <% end %>
+    <% end %>
+  });
+</script>

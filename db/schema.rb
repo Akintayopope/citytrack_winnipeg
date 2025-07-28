@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_27_224648) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_28_003442) do
   create_table "events", force: :cascade do |t|
     t.integer "ward_id", null: false
     t.string "name"
@@ -40,6 +40,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_224648) do
     t.date "request_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
     t.index ["ward_id"], name: "index_service_requests_on_ward_id"
   end
 
