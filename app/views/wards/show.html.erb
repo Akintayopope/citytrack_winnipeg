@@ -1,23 +1,67 @@
-<h1><%= @ward.name %> (<%= @ward.district %>)</h1>
+<h1 class="mb-4"><%= @ward.name %> (<%= @ward.district %>)</h1>
 
-<h3>Service Requests</h3>
-<ul>
-  <% @ward.service_requests.each do |request| %>
-    <li><%= request.category %> - <%= request.status %> (on <%= request.request_date %>)</li>
-  <% end %>
-</ul>
+<!-- Service Requests Section -->
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h3 class="mb-0">Service Requests</h3>
+  </div>
+  <div class="card-body">
+    <% if @ward.service_requests.any? %>
+      <ul class="list-group">
+        <% @ward.service_requests.each do |request| %>
+          <li class="list-group-item">
+            <strong><%= request.category %></strong> - <%= request.status %>
+            <span class="text-muted">(on <%= request.request_date %>)</span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted mb-0">No service requests available for this ward.</p>
+    <% end %>
+  </div>
+</div>
 
-<h3>Expenses</h3>
-<ul>
-  <% @ward.expense_reports.each do |expense| %>
-    <li><%= expense.category %>: $<%= expense.amount %> (on <%= expense.report_date %>)</li>
-  <% end %>
-</ul>
+<!-- Expenses Section -->
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">
+    <h3 class="mb-0">Expenses</h3>
+  </div>
+  <div class="card-body">
+    <% if @ward.expense_reports.any? %>
+      <ul class="list-group">
+        <% @ward.expense_reports.each do |expense| %>
+          <li class="list-group-item">
+            <%= expense.category %>: <strong>$<%= expense.amount %></strong>
+            <span class="text-muted">(on <%= expense.report_date %>)</span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted mb-0">No expenses recorded for this ward.</p>
+    <% end %>
+  </div>
+</div>
 
-<h3>Community Events</h3>
-<ul>
-  <% @ward.events.each do |event| %>
-    <li><%= event.name %> - <%= event.event_date %> at <%= event.location %></li>
-  <% end %>
-</ul>
+<!-- Community Events Section -->
+<div class="card mb-4">
+  <div class="card-header bg-info text-white">
+    <h3 class="mb-0">Community Events</h3>
+  </div>
+  <div class="card-body">
+    <% if @ward.events.any? %>
+      <ul class="list-group">
+        <% @ward.events.each do |event| %>
+          <li class="list-group-item">
+            <strong><%= event.name %></strong> - <%= event.event_date %>
+            <span class="text-muted">at <%= event.location %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted mb-0">No community events available for this ward.</p>
+    <% end %>
+  </div>
+</div>
 
+<!-- Back Button -->
+<%= link_to "Back to Wards", wards_path, class: "btn btn-secondary" %>
