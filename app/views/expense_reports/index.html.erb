@@ -1,42 +1,126 @@
-<h1>Expense Reports</h1>
-
-<%= form_with url: expense_reports_path, method: :get, local: true do %>
-  <div class="form-group">
-    <%= label_tag :search, "Search" %>
-    <%= text_field_tag :search, params[:search], class: "form-control" %>
+<div class="container my-5">
+  <!-- Page Header -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Council Member Expenses</h1>
+    <p class="lead text-muted">Track and analyze all expenses for city wards and categories.</p>
   </div>
 
-  <div class="form-group">
-    <%= label_tag :ward_id, "Filter by Ward" %>
-    <%= select_tag :ward_id, options_from_collection_for_select(@wards, :id, :name, params[:ward_id]), include_blank: "All Wards", class: "form-control" %>
+  <!-- Summary Cards -->
+  <div class="row text-center g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Total Expenses</h6>
+          <h3 class="fw-bold text-primary">$<%= ExpenseReport.sum(:amount) %></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Top Category</h6>
+          <h5 class="fw-bold">
+            <%= ExpenseReport.group(:category).order('SUM(amount) DESC').limit(1).pluck(:category).first || "N/A" %>
+          </h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Most Common Category</h6>
+          <h5 class="fw-bold">
+           <%= ExpenseReport.group(:category).order(Arel.sql('COUNT(*) DESC')).limit(1).pluck(:category).first || "N/A" %>
+
+          </h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Largest Expense</h6>
+          <h5 class="fw-bold">$<%= ExpenseReport.maximum(:amount) || 0 %></h5>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <%= submit_tag "Filter", class: "btn btn-primary mt-2" %>
-<% end %>
+  <!-- Charts Section -->
+  <div class="row mb-5">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title text-center">Expense Breakdown by Category</h5>
+          <%= pie_chart ExpenseReport.group(:category).sum(:amount), height: "300px" %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title text-center">Monthly Expense Trend</h5>
+          <%= column_chart ExpenseReport.group_by_month(:report_date).sum(:amount), height: "300px" %>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-md-12">
-<table class="table table-striped mt-4">
-  <thead>
-    <tr>
-      <th>Category</th>
-      <th>Amount</th>
-      <th>Report Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @expense_reports.each do |expense| %>
-      <tr>
-        <td><%= expense.category %></td>
-        <td>$<%= expense.amount %></td>
-        <td><%= expense.report_date %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
- </div>
+  <!-- Search & Filter -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" id="expenseSearch" placeholder="Search by ward or category...">
+        </div>
+        <div class="col-md-6 text-end">
+         <%= link_to "Download CSV", expense_reports_path(format: :csv), class: "btn btn-outline-primary" %>
+
+        </div>
+      </div>
+
+      <!-- Expense Table -->
+      <table class="table table-hover" id="expenseTable">
+        <thead class="table-light">
+          <tr>
+            <th>Ward ID</th>
+            <th>Category</th>
+            <th>Report Date</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expense_reports.each do |expense| %>
+
+            <tr>
+              <td><%= expense.ward_id %></td>
+              <td><%= expense.category %></td>
+              <td><%= expense.report_date.strftime('%Y-%m-%d') %></td>
+              <td>$<%= expense.amount %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-<%= paginate @expense_reports %>
+
+<!-- Search Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("expenseSearch");
+    const rows = document.querySelectorAll("#expenseTable tbody tr");
+
+    searchInput.addEventListener("keyup", () => {
+      const query = searchInput.value.toLowerCase();
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? "" : "none";
+      });
+    });
+  });
+</script>
 

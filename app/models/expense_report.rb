@@ -3,4 +3,5 @@ class ExpenseReport < ApplicationRecord
 
   validates :category, presence: true
   validates :amount, numericality: true
+
 end

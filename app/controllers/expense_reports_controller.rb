@@ -3,17 +3,23 @@ class ExpenseReportsController < ApplicationController
 
   def index
     @wards = Ward.all
-    @expense_reports = ExpenseReport.all
+    @expense_reports = ExpenseReport.order(report_date: :desc)
 
+    # Search filter by category
     if params[:search].present?
       @expense_reports = @expense_reports.where("category LIKE ?", "%#{params[:search]}%")
     end
 
+    # Filter by ward
     if params[:ward_id].present?
       @expense_reports = @expense_reports.where(ward_id: params[:ward_id])
     end
 
-    @expense_reports = @expense_reports.page(params[:page]).per(10) # Pagination
+    # Respond with HTML or CSV
+    respond_to do |format|
+      format.html
+      format.csv { send_data @expense_reports.to_csv, filename: "expense_reports-#{Date.today}.csv" }
+    end
   end
 
   def show; end

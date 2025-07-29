@@ -66,3 +66,5 @@ end
 
 gem 'httparty'
 gem 'kaminari'
+gem "chartkick"
+gem "groupdate"

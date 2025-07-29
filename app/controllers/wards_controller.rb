@@ -19,4 +19,8 @@ class WardsController < ApplicationController
   def edit
     @ward = Ward.find(params[:id])
   end
+  def show
+  @ward = Ward.includes(:service_requests, :expense_reports, :events).find(params[:id])
+end
+
 end

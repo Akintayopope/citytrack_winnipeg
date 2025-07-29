@@ -8,3 +8,10 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+.service-img {
+  width: 100%;
+  height: 220px; /* Fixed height */
+  object-fit: cover; /* Ensures the image is cropped to fit */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
