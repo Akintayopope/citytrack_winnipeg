@@ -27,7 +27,7 @@ puts "Created #{Ward.count} Wards."
 50.times do
   ServiceRequest.create!(
     category: ["Water", "Garbage & Recycling", "Street Maintenance"].sample,
-    description: Faker::Lorem.sentence(word_count: 8),
+    description: Faker::Quote.famous_last_words,
     status: ["Open", "In Progress", "Closed"].sample,
     request_date: Faker::Date.backward(days: 90),
     ward: wards.sample,

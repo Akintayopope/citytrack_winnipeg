@@ -1,2 +1,86 @@
-<h1>ServiceRequests#show</h1>
-<p>Find me in app/views/service_requests/show.html.erb</p>
+<div class="container my-5">
+  <!-- Page Header -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary"><i class="bi bi-info-circle"></i> Service Request Details</h1>
+    <p class="text-muted">Comprehensive information about this service request.</p>
+  </div>
+
+  <!-- Main Request Details -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h3 class="card-title text-primary mb-3">
+        <i class="bi bi-wrench-adjustable-circle"></i> <%= @service_request.category %>
+      </h3>
+      <hr>
+      <p><strong><i class="bi bi-file-text"></i> Description:</strong><br>
+        <%= @service_request.description.presence || "This service request involves city maintenance or related tasks." %>
+      </p>
+      <p><strong><i class="bi bi-check-circle"></i> Status:</strong>
+        <span class="badge bg-<%= @service_request.status == 'Closed' ? 'secondary' : 'success' %>">
+          <%= @service_request.status %>
+        </span>
+      </p>
+      <p><strong><i class="bi bi-calendar-event"></i> Request Date:</strong>
+        <%= @service_request.request_date.strftime('%B %d, %Y') if @service_request.request_date %>
+      </p>
+      <p><strong><i class="bi bi-geo-alt"></i> Ward:</strong>
+        <%= @service_request.ward.try(:name) %>
+      </p>
+    </div>
+  </div>
+
+  <!-- Timeline and Contact Information -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-clock-history"></i> Request Timeline</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-dot"></i> Submitted on: <%= @service_request.request_date&.strftime('%B %d, %Y') %></li>
+            <li><i class="bi bi-dot"></i> Current status: <%= @service_request.status %></li>
+            <li><i class="bi bi-dot"></i> Last updated: <%= @service_request.updated_at.strftime('%B %d, %Y') %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Contact & Follow-Up</h5>
+          <p>For updates on this service request, contact your ward office:</p>
+          <p><strong>Ward:</strong> <%= @service_request.ward.try(:name) %></p>
+          <p><strong>Email:</strong> info@<%= @service_request.ward.try(:name).to_s.downcase %>.winnipeg.ca</p>
+          <p><strong>Phone:</strong> +1 (204) 123-4567</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Service Requests -->
+  <% if @service_request.ward && @service_request.ward.service_requests.count > 1 %>
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-list-task"></i> Other Service Requests in <%= @service_request.ward.name %></h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <% @service_request.ward.service_requests.where.not(id: @service_request.id).limit(5).each do |req| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= req.category %> - <%= req.status %>
+              <%= link_to "View", service_request_path(req), class: "btn btn-outline-primary btn-sm" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Back Buttons -->
+<div class="mt-4 text-center">
+  <% if @service_request.ward %>
+    <%= link_to "Back to Ward", ward_path(@service_request.ward), class: "btn btn-secondary btn-lg me-2" %>
+  <% end %>
+  <%= link_to "Back to Service Requests", service_requests_path, class: "btn btn-primary btn-lg" %>
+</div>
+
+</div>

@@ -23,4 +23,8 @@ class ServiceRequestsController < ApplicationController
 
   @service_requests = @service_requests.page(params[:page]).per(10)
 end
+def show
+  @service_request = ServiceRequest.find(params[:id])
+end
+
 end

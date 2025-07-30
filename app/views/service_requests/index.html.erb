@@ -1,125 +1,125 @@
-<div class="container my-5">
-  <!-- Page Header -->
-  <div class="text-center mb-4">
-    <h1 class="fw-bold">311 Service Requests</h1>
-    <p class="text-muted">Track and manage service requests across all wards.</p>
-  </div>
+<!-- Page Header -->
+<div class="text-center mb-4">
+  <h1 class="fw-bold">311 Service Requests</h1>
+  <p class="text-muted">Track and manage service requests across all wards.</p>
+</div>
 
-  <!-- Summary Stats -->
-  <% total_requests = @service_requests.count %>
-  <% open_count = @service_requests.where(status: "Open").count %>
-  <% in_progress_count = @service_requests.where(status: "In Progress").count %>
-  <% closed_count = @service_requests.where(status: "Closed").count %>
+<!-- Summary Stats -->
+<% total_requests = @service_requests.count %>
+<% open_count = @service_requests.where(status: "Open").count %>
+<% in_progress_count = @service_requests.where(status: "In Progress").count %>
+<% closed_count = @service_requests.where(status: "Closed").count %>
 
-  <div class="row text-center mb-4">
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 p-3">
-        <h5 class="text-primary mb-1">Total Requests</h5>
-        <h3 class="fw-bold"><%= total_requests %></h3>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 p-3">
-        <h5 class="text-success mb-1">Open</h5>
-        <h3 class="fw-bold"><%= open_count %></h3>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 p-3">
-        <h5 class="text-warning mb-1">In Progress</h5>
-        <h3 class="fw-bold"><%= in_progress_count %></h3>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card shadow-sm border-0 p-3">
-        <h5 class="text-danger mb-1">Closed</h5>
-        <h3 class="fw-bold"><%= closed_count %></h3>
-      </div>
+<div class="row text-center mb-4">
+  <div class="col-md-3">
+    <div class="card shadow-sm border-0 p-3">
+      <h5 class="text-primary mb-1">Total Requests</h5>
+      <h3 class="fw-bold"><%= total_requests %></h3>
     </div>
   </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm border-0 p-3">
+      <h5 class="text-success mb-1">Open</h5>
+      <h3 class="fw-bold"><%= open_count %></h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm border-0 p-3">
+      <h5 class="text-warning mb-1">In Progress</h5>
+      <h3 class="fw-bold"><%= in_progress_count %></h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm border-0 p-3">
+      <h5 class="text-danger mb-1">Closed</h5>
+      <h3 class="fw-bold"><%= closed_count %></h3>
+    </div>
+  </div>
+</div>
 
-  <!-- Status Distribution Progress Bar -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="fw-bold mb-3 text-center">Status Distribution</h5>
-      <div class="progress" style="height: 25px;">
-        <div class="progress-bar bg-success" role="progressbar"
-             style="width: <%= (open_count * 100 / total_requests rescue 0) %>%;">
-          Open (<%= open_count %>)
-        </div>
-        <div class="progress-bar bg-warning text-dark" role="progressbar"
-             style="width: <%= (in_progress_count * 100 / total_requests rescue 0) %>%;">
-          In Progress (<%= in_progress_count %>)
-        </div>
-        <div class="progress-bar bg-danger" role="progressbar"
-             style="width: <%= (closed_count * 100 / total_requests rescue 0) %>%;">
-          Closed (<%= closed_count %>)
-        </div>
+<!-- Status Distribution Progress Bar -->
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="fw-bold mb-3 text-center">Status Distribution</h5>
+    <div class="progress" style="height: 25px;">
+      <div class="progress-bar bg-success" role="progressbar"
+           style="width: <%= (open_count * 100 / total_requests rescue 0) %>%;">
+        Open (<%= open_count %>)
+      </div>
+      <div class="progress-bar bg-warning text-dark" role="progressbar"
+           style="width: <%= (in_progress_count * 100 / total_requests rescue 0) %>%;">
+        In Progress (<%= in_progress_count %>)
+      </div>
+      <div class="progress-bar bg-danger" role="progressbar"
+           style="width: <%= (closed_count * 100 / total_requests rescue 0) %>%;">
+        Closed (<%= closed_count %>)
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Filters -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <%= form_with url: service_requests_path, method: :get, local: true, class: "row g-3" do %>
-        <div class="col-md-4">
-          <%= label_tag :search, "Search", class: "form-label fw-bold" %>
-          <%= text_field_tag :search, params[:search], class: "form-control shadow-sm", placeholder: "Search by description..." %>
-        </div>
+<!-- Filters -->
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <%= form_with url: service_requests_path, method: :get, local: true, class: "row g-3" do %>
+      <div class="col-md-4">
+        <%= label_tag :search, "Search", class: "form-label fw-bold" %>
+        <%= text_field_tag :search, params[:search], class: "form-control shadow-sm", placeholder: "Search by description..." %>
+      </div>
 
-        <div class="col-md-4">
-          <%= label_tag :ward_id, "Filter by Ward", class: "form-label fw-bold" %>
-          <%= select_tag :ward_id, options_from_collection_for_select(@wards, :id, :name, params[:ward_id]), include_blank: "All Wards", class: "form-select shadow-sm" %>
-        </div>
+      <div class="col-md-4">
+        <%= label_tag :ward_id, "Filter by Ward", class: "form-label fw-bold" %>
+        <%= select_tag :ward_id, options_from_collection_for_select(@wards, :id, :name, params[:ward_id]), include_blank: "All Wards", class: "form-select shadow-sm" %>
+      </div>
 
-        <div class="col-md-4">
-          <%= label_tag :status, "Filter by Status", class: "form-label fw-bold" %>
-          <%= select_tag :status, options_for_select(["Open", "In Progress", "Closed"], params[:status]), include_blank: "All Status", class: "form-select shadow-sm" %>
-        </div>
+      <div class="col-md-4">
+        <%= label_tag :status, "Filter by Status", class: "form-label fw-bold" %>
+        <%= select_tag :status, options_for_select(["Open", "In Progress", "Closed"], params[:status]), include_blank: "All Status", class: "form-select shadow-sm" %>
+      </div>
 
-        <div class="col-md-12 text-center">
-          <%= submit_tag "Filter", class: "btn btn-primary mt-3 px-4" %>
-          <%= link_to "Clear Filters", service_requests_path, class: "btn btn-outline-secondary mt-3 ms-2" %>
-        </div>
-      <% end %>
-    </div>
+      <div class="col-md-12 text-center">
+        <%= submit_tag "Filter", class: "btn btn-primary mt-3 px-4" %>
+        <%= link_to "Clear Filters", service_requests_path, class: "btn btn-outline-secondary mt-3 ms-2" %>
+      </div>
+    <% end %>
   </div>
+</div>
 
-  <!-- Requests Table -->
-  <div class="table-responsive shadow-sm">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-primary">
+<!-- Requests Table -->
+<div class="table-responsive shadow-sm">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-primary">
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Ward</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @service_requests.each do |request| %>
         <tr>
-          <th>Category</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Request Date</th>
-          <th>Ward</th>
+          <td class="fw-bold"><%= request.category %></td>
+          <td>
+            <%= request.description.present? ?
+                truncate(request.description, length: 60) :
+                "No description available for this request." %>
+          </td>
+          <td>
+            <span class="badge
+              <%= case request.status
+                   when 'Open' then 'bg-success'
+                   when 'In Progress' then 'bg-warning text-dark'
+                   else 'bg-danger'
+                 end %>">
+              <%= request.status %>
+            </span>
+          </td>
+          <td><%= request.request_date.strftime("%b %d, %Y") %></td>
+          <td><%= link_to request.ward.name, ward_path(request.ward), class: "text-primary fw-bold" %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @service_requests.each do |request| %>
-          <tr>
-            <td class="fw-bold"><%= request.category %></td>
-            <td><%= truncate(request.description, length: 60) %></td>
-            <td>
-              <span class="badge
-                <%= case request.status
-                     when 'Open' then 'bg-success'
-                     when 'In Progress' then 'bg-warning text-dark'
-                     else 'bg-danger'
-                   end %>">
-                <%= request.status %>
-              </span>
-            </td>
-            <td><%= request.request_date.strftime("%b %d, %Y") %></td>
-            <td><%= link_to request.ward.name, ward_path(request.ward), class: "text-primary fw-bold" %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-
-
+      <% end %>
+    </tbody>
+  </table>
 </div>

@@ -1,2 +1,41 @@
-<h1>Events#edit</h1>
-<p>Find me in app/views/events/edit.html.erb</p>
+<div class="container my-5">
+  <!-- Page Header -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-warning"><i class="bi bi-pencil-square"></i> Edit Event</h1>
+    <p class="lead text-muted">Update the details of this event.</p>
+  </div>
+
+  <div class="card shadow-sm border-0 p-4">
+    <%= form_with(model: @event, local: true, class: "needs-validation") do |form| %>
+      <div class="mb-3">
+        <%= form.label :name, "Event Name", class: "form-label fw-bold" %>
+        <%= form.text_field :name, class: "form-control shadow-sm", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, "Description", class: "form-label fw-bold" %>
+        <%= form.text_area :description, rows: 4, class: "form-control shadow-sm" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :location, "Location", class: "form-label fw-bold" %>
+        <%= form.text_field :location, class: "form-control shadow-sm", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :event_date, "Event Date", class: "form-label fw-bold" %>
+        <%= form.date_field :event_date, class: "form-control shadow-sm", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :ward_id, "Ward", class: "form-label fw-bold" %>
+        <%= form.collection_select :ward_id, Ward.all, :id, :name, { prompt: "Select Ward" }, class: "form-select shadow-sm" %>
+      </div>
+
+      <div class="text-center mt-4">
+        <%= form.submit "Update Event", class: "btn btn-warning btn-lg px-4" %>
+        <%= link_to "Cancel", event_path(@event), class: "btn btn-outline-secondary btn-lg ms-3" %>
+      </div>
+    <% end %>
+  </div>
+</div>
