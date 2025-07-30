@@ -1,5 +1,7 @@
 class Event < ApplicationRecord
   belongs_to :ward
 
-  validates :name, :location, :event_date, presence: true
+  validates :name, presence: true
+  validates :event_date, presence: true
+  validates :location, presence: true
 end

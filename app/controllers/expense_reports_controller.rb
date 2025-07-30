@@ -15,6 +15,9 @@ class ExpenseReportsController < ApplicationController
       @expense_reports = @expense_reports.where(ward_id: params[:ward_id])
     end
 
+    # Apply pagination
+    @expense_reports = @expense_reports.page(params[:page]).per(10)
+
     # Respond with HTML or CSV
     respond_to do |format|
       format.html

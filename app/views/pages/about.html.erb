@@ -1,13 +1,48 @@
-<h1>About CityTrack Winnipeg</h1>
-<h3>Database ERD</h3>
-<%= image_tag "erd.png", class: "img-fluid" %>
+<div class="container my-5">
+  <!-- Title Section -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary">About CityTrack Winnipeg</h1>
+    <p class="lead text-muted">
+      CityTrack Winnipeg is a data visualization platform that integrates city-wide datasets
+      to track service requests, council member expenses, and community events.
+    </p>
+  </div>
 
-<p>
-  CityTrack Winnipeg uses open data from the City of Winnipeg:
-</p>
-<ul>
-  <li><strong>311 Service Requests:</strong> Real-time service request data.</li>
-  <li><strong>Council Member Expenses:</strong> Financial records for councillor spending.</li>
-  <li><strong>Community Events:</strong> Faker-generated sample events for testing.</li>
-</ul>
+  <!-- ERD Section -->
+  <div class="text-center mb-5">
+    <h3 class="fw-bold">Database ERD</h3>
+    <div class="d-flex justify-content-center">
+      <%= image_tag "erd.png", class: "img-fluid rounded shadow-sm border p-2", alt: "Database ERD Diagram" %>
+    </div>
+  </div>
 
+  <!-- Data Sources -->
+  <div class="mb-4">
+    <h3 class="fw-bold">Data Sources</h3>
+    <ul class="list-group list-group-flush shadow-sm">
+      <li class="list-group-item">
+        <strong>311 Service Requests:</strong> Real-time service request data from the City of Winnipeg.
+      </li>
+      <li class="list-group-item">
+        <strong>Council Member Expenses:</strong> Financial records of councillor spending, categorized by wards.
+      </li>
+      <li class="list-group-item">
+        <strong>Community Events:</strong> Faker-generated sample events for testing and demonstration purposes.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Data Integration -->
+  <div class="mb-4">
+    <h3 class="fw-bold">How Data is Integrated</h3>
+    <p>
+      All datasets are connected through the <strong>Ward</strong> model, allowing hierarchical navigation.
+      For example, users can view all service requests, expenses, and events associated with a specific ward.
+    </p>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center mt-4">
+    <%= link_to "Back to Home", root_path, class: "btn btn-outline-primary btn-lg" %>
+  </div>
+</div>

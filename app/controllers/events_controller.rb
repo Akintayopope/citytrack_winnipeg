@@ -3,6 +3,8 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.order(event_date: :asc)
+                   .page(params[:page])
+                   .per(6) # Display 6 events per page
   end
 
   def show; end

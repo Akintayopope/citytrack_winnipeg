@@ -4,7 +4,8 @@ class ExpenseReport < ApplicationRecord
   belongs_to :ward
 
   validates :category, presence: true
-  validates :amount, numericality: true
+  validates :amount, numericality: { greater_than: 0 }
+  validates :report_date, presence: true
 
   def self.to_csv
     attributes = %w{id ward_name category amount report_date created_at updated_at}
