@@ -35,3 +35,6 @@
 
 # Ignore local DB config
 config/database.yml
+
+# Ignore local DB config
+config/database.yml
