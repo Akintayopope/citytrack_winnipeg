@@ -36,7 +36,7 @@ class ExpenseReportsController < ApplicationController
   def create
     @expense_report = ExpenseReport.new(expense_report_params)
     if @expense_report.save
-      redirect_to @expense_report, notice: 'Expense report was successfully created.'
+      redirect_to @expense_report, notice: "Expense report was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -44,7 +44,7 @@ class ExpenseReportsController < ApplicationController
 
   def update
     if @expense_report.update(expense_report_params)
-      redirect_to @expense_report, notice: 'Expense report was successfully updated.'
+      redirect_to @expense_report, notice: "Expense report was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -52,7 +52,7 @@ class ExpenseReportsController < ApplicationController
 
   def destroy
     @expense_report.destroy
-    redirect_to expense_reports_url, notice: 'Expense report was successfully deleted.'
+    redirect_to expense_reports_url, notice: "Expense report was successfully deleted."
   end
 
   private

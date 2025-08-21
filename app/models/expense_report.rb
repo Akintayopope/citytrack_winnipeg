@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 class ExpenseReport < ApplicationRecord
   belongs_to :ward
@@ -8,7 +8,7 @@ class ExpenseReport < ApplicationRecord
   validates :report_date, presence: true
 
   def self.to_csv
-    attributes = %w{id ward_name category amount report_date created_at updated_at}
+    attributes = %w[id ward_name category amount report_date created_at updated_at]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -20,7 +20,7 @@ class ExpenseReport < ApplicationRecord
           report.id,
           report.ward&.name,  # Use ward name instead of ID
           report.category,
-          sprintf('%.2f', report.amount), # Format amount as 2 decimals
+          sprintf("%.2f", report.amount), # Format amount as 2 decimals
           report.report_date,
           report.created_at,
           report.updated_at
@@ -29,7 +29,7 @@ class ExpenseReport < ApplicationRecord
 
       # Add a blank row and TOTAL row at the end
       csv << []
-      csv << ["", "", "TOTAL", sprintf('%.2f', total_amount), "", "", ""]
+      csv << [ "", "", "TOTAL", sprintf("%.2f", total_amount), "", "", "" ]
     end
   end
 end
